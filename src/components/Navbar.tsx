@@ -12,8 +12,8 @@ export default function Navbar() {
             <Link href="/" className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-br from-gray-800 to-gray-600 rounded-sm flex items-center justify-center text-white font-semibold">T</div>
               <div className="hidden sm:block">
-                <div className="font-semibold text-lg text-gray-900 dark:text-white">Topsy Ventures</div>
-                <div className="text-xs text-gray-500">Drive2Own Ghana</div>
+                <div className="font-heading font-semibold text-lg text-brand-900">Topsy Ventures</div>
+                <div className="text-xs text-muted">Drive2Own Ghana</div>
               </div>
             </Link>
           </div>

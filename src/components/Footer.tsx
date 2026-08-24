@@ -4,9 +4,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-white text-gray-900 flex items-center justify-center font-bold rounded-sm">T</div>
+            <div className="w-10 h-10 bg-accent text-white flex items-center justify-center font-bold rounded-sm">T</div>
             <div>
-              <div className="font-semibold">Topsy Ventures</div>
+              <div className="font-heading font-semibold">Topsy Ventures</div>
               <div className="text-sm text-gray-400">Drive2Own Ghana — Demo</div>
             </div>
           </div>
