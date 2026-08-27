@@ -16,6 +16,28 @@ export type Vehicle = {
   status: 'available' | 'sold'
 }
 
+export function getDemoPaymentSummary(
+  price: number,
+  deposit = 0,
+  term = 36,
+  annualRate = 12
+) {
+  const validDeposit = Math.max(0, deposit)
+  const amountFinanced = Math.max(0, price - validDeposit)
+  const monthlyRate = annualRate / 100 / 12
+
+  const monthlyPayment = monthlyRate === 0 || term <= 0
+    ? amountFinanced / (term || 1)
+    : (amountFinanced * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -term))
+
+  return {
+    deposit: validDeposit,
+    amountFinanced,
+    monthlyPayment,
+    totalRepayment: monthlyPayment * term + validDeposit,
+  }
+}
+
 export const vehicles: Vehicle[] = [
   {
     id: 'toyota-corolla-2020',
@@ -28,9 +50,13 @@ export const vehicles: Vehicle[] = [
     fuelType: 'Petrol',
     bodyType: 'Sedan',
     condition: 'Used',
-    description: 'Well-maintained Toyota Corolla with a clean service history. Efficient, reliable, and perfect for urban driving in Ghana.',
+    description: 'Well-maintained Toyota Corolla with a clean service history, efficient daily usability, and a comfortable cabin for city and highway driving.',
     features: ['Air Conditioning', 'Bluetooth', 'Reverse Camera', 'Cruise Control'],
-    images: ['/images/corolla-1.jpg', '/images/corolla-2.jpg', '/images/corolla-3.jpg'],
+    images: [
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1494905998402-395d579af36f?auto=format&fit=crop&w=1200&q=80',
+    ],
     drive2OwnAvailable: true,
     status: 'available',
   },
@@ -45,9 +71,34 @@ export const vehicles: Vehicle[] = [
     fuelType: 'Petrol',
     bodyType: 'Sedan',
     condition: 'Used',
-    description: 'Premium comfort and reliability. Ideal for corporate use and family travel.',
+    description: 'A premium and reliable executive sedan offering smooth comfort, strong value, and a refined driving experience.',
     features: ['Leather Seats', 'Sunroof', 'Navigation', 'Keyless Entry'],
-    images: ['/images/camry-1.jpg', '/images/camry-2.jpg'],
+    images: [
+      'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1200&q=80',
+    ],
+    drive2OwnAvailable: true,
+    status: 'available',
+  },
+  {
+    id: 'toyota-rav4-2022',
+    make: 'Toyota',
+    model: 'RAV4',
+    year: 2022,
+    price: 190000,
+    mileage: 22000,
+    transmission: 'Automatic',
+    fuelType: 'Petrol',
+    bodyType: 'SUV',
+    condition: 'Used',
+    description: 'Practical SUV with elevated seating, smart storage, and a versatile cabin suited to family and everyday driving.',
+    features: ['Alloy Wheels', 'Bluetooth', 'Rear Camera', 'Parking Sensors'],
+    images: [
+      'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80',
+    ],
     drive2OwnAvailable: true,
     status: 'available',
   },
@@ -62,27 +113,14 @@ export const vehicles: Vehicle[] = [
     fuelType: 'Petrol',
     bodyType: 'SUV',
     condition: 'Used',
-    description: 'Spacious SUV with modern features and excellent handling.',
-    features: ['Alloy Wheels', 'Bluetooth', 'Parking Sensors'],
-    images: ['/images/tucson-1.jpg', '/images/tucson-2.jpg'],
+    description: 'A versatile SUV with spacious interiors, a strong feature list, and a commanding road presence.',
+    features: ['Alloy Wheels', 'Bluetooth', 'Parking Sensors', 'Lane Assist'],
+    images: [
+      'https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80',
+    ],
     drive2OwnAvailable: true,
-    status: 'available',
-  },
-  {
-    id: 'mercedes-c-class-2018',
-    make: 'Mercedes-Benz',
-    model: 'C-Class',
-    year: 2018,
-    price: 250000,
-    mileage: 80000,
-    transmission: 'Automatic',
-    fuelType: 'Petrol',
-    bodyType: 'Sedan',
-    condition: 'Used',
-    description: 'Luxury sedan with refined ride and premium amenities.',
-    features: ['Leather Interior', 'Adaptive Cruise', 'Premium Audio'],
-    images: ['/images/mercedes-1.jpg', '/images/mercedes-2.jpg'],
-    drive2OwnAvailable: false,
     status: 'available',
   },
   {
@@ -96,9 +134,13 @@ export const vehicles: Vehicle[] = [
     fuelType: 'Petrol',
     bodyType: 'SUV',
     condition: 'Used',
-    description: 'Modern SUV with excellent fuel economy and safety features.',
-    features: ['Lane Assist', 'Apple CarPlay', 'Android Auto'],
-    images: ['/images/kia-1.jpg', '/images/kia-2.jpg'],
+    description: 'Modern SUV styling, smart driver aids, and everyday practicality in a clean, efficient package.',
+    features: ['Lane Assist', 'Apple CarPlay', 'Android Auto', 'Smart Key'],
+    images: [
+      'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1494905998402-395d579af36f?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80',
+    ],
     drive2OwnAvailable: true,
     status: 'available',
   },
@@ -113,9 +155,13 @@ export const vehicles: Vehicle[] = [
     fuelType: 'Petrol',
     bodyType: 'SUV',
     condition: 'Used',
-    description: 'Reliable crossover with generous cargo space and comfort.',
-    features: ['Safety Suite', 'Rear Climate Control'],
-    images: ['/images/crv-1.jpg', '/images/crv-2.jpg'],
+    description: 'Reliable crossover with generous cargo space, clean road manners, and comfortable family-oriented features.',
+    features: ['Safety Suite', 'Rear Climate Control', 'Adaptive Cruise'],
+    images: [
+      'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1200&q=80',
+    ],
     drive2OwnAvailable: true,
     status: 'available',
   },
@@ -130,9 +176,32 @@ export const vehicles: Vehicle[] = [
     fuelType: 'Diesel',
     bodyType: 'SUV',
     condition: 'Used',
-    description: 'Capable SUV with efficient diesel engine and good towing capacity.',
-    features: ['4x4', 'Tow Hitch'],
-    images: ['/images/xtrail-1.jpg'],
+    description: 'A capable SUV with generous cabin space and an efficient diesel powertrain suited for road trips and daily driving.',
+    features: ['4x4', 'Tow Hitch', 'Rear Parking Sensors'],
+    images: [
+      'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1494905998402-395d579af36f?auto=format&fit=crop&w=1200&q=80',
+    ],
+    drive2OwnAvailable: false,
+    status: 'available',
+  },
+  {
+    id: 'mercedes-c-class-2018',
+    make: 'Mercedes-Benz',
+    model: 'C-Class',
+    year: 2018,
+    price: 250000,
+    mileage: 80000,
+    transmission: 'Automatic',
+    fuelType: 'Petrol',
+    bodyType: 'Sedan',
+    condition: 'Used',
+    description: 'Luxury sedan with refined comfort, premium cabin finishing, and a composed, executive drivetrain.',
+    features: ['Leather Interior', 'Adaptive Cruise', 'Premium Audio'],
+    images: [
+      'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80',
+    ],
     drive2OwnAvailable: false,
     status: 'available',
   },

@@ -1,23 +1,28 @@
 'use client'
 
-import ApplicationForm from '@/components/ApplicationForm'
+import { Suspense } from 'react'
+import TestDriveForm from '@/components/TestDriveForm'
 import { useSearchParams } from 'next/navigation'
-import { vehicles } from '@/data/vehicles'
 
-export default function ApplyPage(){
+function TestDrivePageContent() {
   const params = useSearchParams()
-  const vehicle = params?.get('vehicle') || undefined
-  const initial = vehicle ? { vehicle } : undefined
+  const vehicle = params?.get('vehicle') || ''
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
-      <h1 className="text-2xl font-semibold">Drive2Own Application</h1>
-      <p className="text-sm text-gray-600 mt-2">Complete the application and our demo team will review your request.</p>
-
+      <h1 className="text-2xl font-semibold">Book a Test Drive</h1>
+      <p className="text-sm text-gray-600 mt-2">Let us know when you'd like to try a vehicle.</p>
       <div className="mt-6">
-        <ApplicationForm />
+        <TestDriveForm />
       </div>
     </div>
   )
 }
 
+export default function TestDrivePage() {
+  return (
+    <Suspense fallback={<div className="max-w-3xl mx-auto px-4 py-12 text-sm text-gray-500">Loading form…</div>}>
+      <TestDrivePageContent />
+    </Suspense>
+  )
+}

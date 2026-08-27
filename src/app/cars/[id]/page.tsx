@@ -1,16 +1,15 @@
-'use client'
-
 import { notFound } from 'next/navigation'
 import { vehicles } from '@/data/vehicles'
 import VehicleGallery from '@/components/VehicleGallery'
 import FinancingCalculator from '@/components/FinancingCalculator'
 import Link from 'next/link'
 
-export default function VehicleDetail({ params }: { params: { id: string } }){
-  const vehicle = vehicles.find(v=>v.id===params.id)
-  if(!vehicle) return notFound()
+export default async function VehicleDetail({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const vehicle = vehicles.find(v => v.id === id)
+  if (!vehicle) return notFound()
 
-  const estimatedMonthly = Math.round((vehicle.price - (vehicle.price*0.1))/36)
+  const estimatedMonthly = Math.round((vehicle.price - (vehicle.price * 0.1)) / 36)
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">

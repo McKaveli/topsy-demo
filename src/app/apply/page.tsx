@@ -1,13 +1,12 @@
 'use client'
 
+import { Suspense } from 'react'
 import ApplicationForm from '@/components/ApplicationForm'
 import { useSearchParams } from 'next/navigation'
-import { vehicles } from '@/data/vehicles'
 
-export default function ApplyPage(){
+function ApplyPageContent() {
   const params = useSearchParams()
   const vehicle = params?.get('vehicle') || undefined
-  const initial = vehicle ? { vehicle } : undefined
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
@@ -18,5 +17,13 @@ export default function ApplyPage(){
         <ApplicationForm />
       </div>
     </div>
+  )
+}
+
+export default function ApplyPage() {
+  return (
+    <Suspense fallback={<div className="max-w-3xl mx-auto px-4 py-12 text-sm text-gray-500">Loading application…</div>}>
+      <ApplyPageContent />
+    </Suspense>
   )
 }
